@@ -25,9 +25,9 @@ public class UserServiceImpl implements UserService {
     public void register(String username, String password) {
         //密码加密 调用Md5Util
 
-        Md5Util.getMD5String(password);
+        String md5Password = Md5Util.getMD5String(password);
 
         //添加用户
-        userMapper.add(username,password);
+        userMapper.add(username,md5Password);
     }
 }

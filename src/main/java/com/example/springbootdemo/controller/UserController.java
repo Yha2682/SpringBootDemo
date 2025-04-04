@@ -24,7 +24,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     @PostMapping("register")
-    public Result register (@Pattern(regexp = "^\\S{5,16}$") String username,@Pattern(regexp = "^\\S{5,16}$") String password) {
+    public Result<String> register (@Pattern(regexp = "^\\S{5,16}$") String username,@Pattern(regexp = "^\\S{5,16}$") String password) {
         //参数校验 (@Pattern(regexp = "^\\s{5,16}$") 正则表达式 获取5-16的非空字符
         //查询用户
         User user = userService.findByUserName(username);
