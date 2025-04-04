@@ -40,20 +40,20 @@ public class UserController {
 
     //用户登录
     @PostMapping("/login")
-    public Result login(@Pattern(regexp = "^\\S{5,16}$") String username, @Pattern(regexp = "^\\S{5,16}$")  String password) {
+    public Result<String> login(@Pattern(regexp = "^\\S{5,16}$") String username, @Pattern(regexp = "^\\S{5,16}$")  String password) {
         //查找用户名
-        User user = userService.findByUserName(username);
+        User loginUser = userService.findByUserName(username);
         //判断是否存在
-        if (user == null) {
+        if (loginUser == null) {
             return Result.error("用户名错误!");
         }
         //判断密码是否正确，其中密码是login对象的passwd密文
-        if (Md5Util.getMD5String(password).equals(user.getPassword())) {
+        if (Md5Util.getMD5String(password).equals(loginUser.getPassword())) {
 
             //登录成功
             Map<String, Object> claims = new HashMap<>();
-            claims.put("id", user.getId());
-            claims.put("username", user.getUsername());
+            claims.put("id", loginUser.getId());
+            claims.put("username", loginUser.getUsername());
             String token = JwtUtil.genToken(claims);
 
             return Result.success(token);
