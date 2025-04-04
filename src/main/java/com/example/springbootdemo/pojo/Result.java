@@ -2,12 +2,14 @@ package com.example.springbootdemo.pojo;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 //NoArgs 注入无参构造方法
 @NoArgsConstructor
 //AllArgs全参构造方法
 @AllArgsConstructor
+@Data
 public class Result<T> {
     private Integer code;//业务状态码 0-成功 1-失败
     private String message;//提示信息
