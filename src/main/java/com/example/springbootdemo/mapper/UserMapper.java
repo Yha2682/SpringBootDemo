@@ -7,14 +7,12 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface UserMapper {
-
     //根据用户名查询用户
-    @Select("SELECT * from user where username=#{username}")
+    @Select("select * from user where username=#{username}")
     User findByUserName(String username);
 
-
-    //添加用户
-    @Insert("insert into user(username,password,create_time,updata_time)" +
-            "values (#{username},#{password},now(),now())")
+    //添加
+    @Insert("insert into user(username,password,create_time,update_time)" +
+            " values(#{username},#{password},now(),now())")
     void add(String username, String password);
 }
