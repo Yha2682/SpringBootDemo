@@ -1,6 +1,10 @@
 package com.example.springbootdemo.pojo;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import lombok.NonNull;
 import net.minidev.json.annotate.JsonIgnore;
 
 import java.time.LocalDateTime;
@@ -9,6 +13,7 @@ import java.time.LocalDateTime;
 // pom文件中引入依赖   在实体类上添加注解
 @Data
 public class User {
+    @NonNull
     private Integer id;//主键ID
     private String username;//用户名
 
@@ -16,7 +21,11 @@ public class User {
                 //但是不知道为什么没用
     private String password;//密码
 
+    @NotEmpty
+    @Pattern(regexp = "^\\S{1,10}$")
     private String nickname;//昵称
+    @NotEmpty
+    @Email
     private String email;//邮箱
     private String userPic;//用户头像地址
     private LocalDateTime createTime;//创建时间
