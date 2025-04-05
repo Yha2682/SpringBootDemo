@@ -7,13 +7,17 @@ import com.example.springbootdemo.service.UserService;
 import com.example.springbootdemo.utils.JwtUtil;
 import com.example.springbootdemo.utils.Md5Util;
 import com.example.springbootdemo.utils.ThreadLocalUtil;
+import io.micrometer.common.util.StringUtils;
 import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static io.micrometer.common.util.StringUtils.*;
 
 @RestController
 @RequestMapping("/user")
@@ -73,12 +77,49 @@ public class UserController {
 
     //用户信息更新 put请求
     @PutMapping("/update")
-    public Result update(@RequestBody @Validated User user){
+    public Result update(@RequestBody/*MVC框架自动读取请求主体的json格式数据*/ @Validated User user){
 
         userService.update(user);
         System.out.println("收到更新请求：" + user);
         return Result.success();
 
+    }
+
+    //用户头像更新
+    @PatchMapping("/updateAvatar")
+    public Result updateAvatar(@RequestParam @URL/*@URL检查url是否合法*/ String avatarUrl){
+        userService.updateAvatar(avatarUrl);
+        return Result.success();
+    }
+
+    //用户更新密码
+    @PatchMapping("/updatePwd")
+    public Result updatePwd(@RequestBody Map<String,String> params){
+        //校验参数
+        String oldPwd = params.get("oldPwd");
+        String newPwd = params.get("newPwd");
+        String rePwd = params.get("rePwd");
+
+        //不为空
+        if (StringUtils.isEmpty(oldPwd) || StringUtils.isEmpty(newPwd) || StringUtils.isEmpty(rePwd)) {
+            return Result.error("参数不符合要求！！");
+        }
+
+        //检验原密码是否正确
+        Map<String,Object> map = ThreadLocalUtil.get();
+        String username = (String) map.get("username");
+        User user = userService.findByUserName(username);
+        if (!user.getPassword().equals(Md5Util.getMD5String(oldPwd))) {
+            return Result.error("原密码不正确");
+        }
+        //newPwd和rePwd是否一致
+        if (!rePwd.equals/*比较两个对象“内容”是否相等*/(newPwd)) {
+            return Result.error("新旧密码不一样");
+        }
+
+        //调用service完成密码更新
+        userService.updatePwd(newPwd);
+        return Result.success();
     }
 
 }
