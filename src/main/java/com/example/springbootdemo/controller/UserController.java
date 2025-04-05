@@ -6,13 +6,11 @@ import com.example.springbootdemo.pojo.User;
 import com.example.springbootdemo.service.UserService;
 import com.example.springbootdemo.utils.JwtUtil;
 import com.example.springbootdemo.utils.Md5Util;
+import com.example.springbootdemo.utils.ThreadLocalUtil;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,10 +62,20 @@ public class UserController {
 
     //根据用户名查询用户
     @RequestMapping("/userInfo")
-    public Result<User> userInfo(@RequestHeader(name="Authorization") String token){
-        Map<String, Object> map = JwtUtil.parseToken(token);
+    public Result<User> userInfo(/*@RequestHeader(name="Authorization") String token*/){
+        /*Map<String, Object> map = JwtUtil.parseToken(token);
+        String username = (String) map.get("username");*/
+        Map<String,Object> map =ThreadLocalUtil.get();
         String username = (String) map.get("username");
         User user = userService.findByUserName(username);
+        return Result.success(user);
+    }
+
+    //用户信息更新
+
+    @RequestMapping("/update")
+    public Result update(@RequestBody User user){
+        userService.update(user);
         return Result.success(user);
     }
 

@@ -1,6 +1,7 @@
 package com.example.springbootdemo.interceptors;
 
 import com.example.springbootdemo.utils.JwtUtil;
+import com.example.springbootdemo.utils.ThreadLocalUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
@@ -21,9 +22,14 @@ public class LoginInterceptor implements HandlerInterceptor {
             /*String token = authHeader.replace("Bearer ", "");*/
             try {
                 Map<String, Object> claims = JwtUtil.parseToken(authHeader);
+
+                //把业务数据存储到ThreadLocal中
+                ThreadLocalUtil.set(claims);
+
                 // 把 claims 存入 request 属性供后续使用
                 request.setAttribute("claims", claims);
                 return true; // 放行
+
             } catch (Exception e) {
                 // token 无效
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -43,5 +49,10 @@ public class LoginInterceptor implements HandlerInterceptor {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().write("请登录！");
         return false;
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        ThreadLocalUtil.remove();
     }
 }

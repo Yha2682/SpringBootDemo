@@ -13,6 +13,7 @@ public class User {
     private String username;//用户名
 
     @JsonIgnore//让springmvc把当前对象转换成json字符串的时候，忽略password,最终的json字符串中就没有password这个属性了
+                //但是不知道为什么没用
     private String password;//密码
 
     private String nickname;//昵称
