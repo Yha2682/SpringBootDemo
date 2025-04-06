@@ -2,9 +2,7 @@ package com.example.springbootdemo.mapper;
 
 
 import com.example.springbootdemo.pojo.Category;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -23,4 +21,13 @@ public interface CategoryMapper {
     //查询文章详细
     @Select("SELECT * FROM category where id=#{id}")
     Category findById(Integer id);
+
+    //更新文章内容
+    @Update("update category set category_name=#{categoryName},category_alias=#{categoryAlias}" +
+            ",update_time=#{updateTime} where id = #{id}")
+    void updata(Category category);
+
+    //删除文章
+    @Delete("delete FROM category where id=#{id}")
+    void deleteById(Integer id);
 }

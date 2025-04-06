@@ -46,4 +46,16 @@ public class CategoryServerImpl implements CategoryService {
         return data;
     }
 
+    @Override
+    public void update(Category category) {
+        category.setUpdateTime(LocalDateTime.now());
+        categoryMapper.updata(category);
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        categoryMapper.deleteById(id);
+    }
+
+
 }

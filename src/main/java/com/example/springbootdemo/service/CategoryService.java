@@ -12,4 +12,8 @@ public interface CategoryService {
     List<Category> getCategoryList();
     //获取文章详细
     Category findById(Integer id);
+
+    void update(Category category);
+
+    void deleteById(Integer id);
 }

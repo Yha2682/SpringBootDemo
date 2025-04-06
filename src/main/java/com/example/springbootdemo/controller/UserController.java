@@ -102,7 +102,7 @@ public class UserController {
 
         //不为空
         if (StringUtils.isEmpty(oldPwd) || StringUtils.isEmpty(newPwd) || StringUtils.isEmpty(rePwd)) {
-            return Result.error("参数不符合要求！！");
+            return Result.error("有字段是空的！！！，参数不符合要求！！");
         }
 
         //检验原密码是否正确
@@ -110,11 +110,11 @@ public class UserController {
         String username = (String) map.get("username");
         User user = userService.findByUserName(username);
         if (!user.getPassword().equals(Md5Util.getMD5String(oldPwd))) {
-            return Result.error("原密码不正确");
+            return Result.error("原密码不正确！！");
         }
         //newPwd和rePwd是否一致
         if (!rePwd.equals/*比较两个对象“内容”是否相等*/(newPwd)) {
-            return Result.error("新旧密码不一样");
+            return Result.error("新旧密码不一样！！");
         }
 
         //调用service完成密码更新
