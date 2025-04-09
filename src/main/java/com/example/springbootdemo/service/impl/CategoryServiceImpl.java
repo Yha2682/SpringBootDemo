@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class CategoryServerImpl implements CategoryService {
+public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private  CategoryMapper categoryMapper;
